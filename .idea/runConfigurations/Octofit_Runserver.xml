@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Octofit Runserver" type="PythonConfigurationType" factoryName="Python">
+    <module name="skills-build-applications-w-copilot-agent-mode" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/octofit-tracker/backend/manage.py" />
+    <option name="PARAMETERS" value="runserver" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/octofit-tracker/backend" />
+    <option name="ADD_CONTENT_ROOTS" value="true" />
+    <option name="ADD_SOURCE_ROOTS" value="true" />
+    <option name="SHOW_COMMAND_LINE" value="false" />
+    <option name="EMULATE_TERMINAL" value="false" />
+    <method v="2" />
+  </configuration>
+</component>
+
