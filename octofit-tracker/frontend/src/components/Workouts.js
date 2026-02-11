@@ -4,6 +4,7 @@ function Workouts({ apiBaseUrl }) {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const getDifficultyBadgeColor = (difficulty) => {
     switch (difficulty?.toLowerCase()) {
@@ -65,9 +66,53 @@ function Workouts({ apiBaseUrl }) {
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>💪 Workouts</h2>
-        <button className="btn btn-primary btn-sm">+ Create Workout</button>
+        <h2 className="mb-0">💪 Workouts</h2>
+        <button className="btn btn-primary btn-sm" onClick={() => setShowModal(true)}>+ Create Workout</button>
       </div>
+
+      {/* Create Workout Modal */}
+      {showModal && (
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content shadow">
+              <div className="modal-header bg-dark text-white">
+                <h5 className="modal-title">Define New Workout</h5>
+                <button type="button" className="btn-close btn-close-white" onClick={() => setShowModal(false)}></button>
+              </div>
+              <div className="modal-body">
+                <form>
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Workout Name</label>
+                    <input type="text" className="form-control" placeholder="e.g. Morning Burn" />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Description</label>
+                    <textarea className="form-control" rows="3"></textarea>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label fw-bold">Duration (min)</label>
+                      <input type="number" className="form-control" />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label fw-bold">Difficulty</label>
+                      <select className="form-select">
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>Advanced</option>
+                      </select>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-outline-secondary" onClick={() => setShowModal(false)}>Close</button>
+                <button type="button" className="btn btn-primary" onClick={() => setShowModal(false)}>Save Workout</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {workouts.length === 0 ? (
         <div className="alert alert-warning">No workouts available</div>

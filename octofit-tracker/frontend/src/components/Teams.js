@@ -4,6 +4,7 @@ function Teams({ apiBaseUrl }) {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -30,6 +31,19 @@ function Teams({ apiBaseUrl }) {
     fetchTeams();
   }, [apiBaseUrl]);
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCreateTeam = () => {
+    // Logic for creating a team
+    setShowModal(false);
+  };
+
   if (loading) {
     return (
       <div className="alert alert-info d-flex align-items-center" role="alert">
@@ -51,7 +65,71 @@ function Teams({ apiBaseUrl }) {
 
   return (
     <div>
-      <h2 className="mb-4">👥 Teams</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="mb-0">👥 Teams</h2>
+        <button className="btn btn-primary btn-sm" onClick={handleShowModal}>
+          + New Team
+        </button>
+      </div>
+
+      {/* New Team Modal */}
+      {showModal && (
+        <div
+          className="modal show d-block"
+          tabIndex="-1"
+          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content shadow">
+              <div className="modal-header bg-dark text-white">
+                <h5 className="modal-title">Create New Team</h5>
+                <button
+                  type="button"
+                  className="btn-close btn-close-white"
+                  onClick={handleCloseModal}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <form>
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Team Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter team name"
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Description</label>
+                    <textarea
+                      className="form-control"
+                      rows="3"
+                      placeholder="What is this team about?"
+                    ></textarea>
+                  </div>
+                </form>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={handleCloseModal}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleCreateTeam}
+                >
+                  Create Team
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {teams.length === 0 ? (
         <div className="alert alert-warning">No teams available</div>
       ) : (
@@ -64,7 +142,9 @@ function Teams({ apiBaseUrl }) {
                   <p className="card-text text-muted">{team.description}</p>
                 </div>
                 <div className="card-footer bg-white border-top">
-                  <button className="btn btn-sm btn-outline-primary">View Details</button>
+                  <button className="btn btn-sm btn-outline-primary">
+                    View Details
+                  </button>
                 </div>
               </div>
             </div>

@@ -4,6 +4,7 @@ function Activities({ apiBaseUrl }) {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -52,14 +53,60 @@ function Activities({ apiBaseUrl }) {
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>🏃 Activities</h2>
-        <button className="btn btn-primary btn-sm">+ Log Activity</button>
+        <h2 className="mb-0">🏃 Activities</h2>
+        <button className="btn btn-primary btn-sm" onClick={() => setShowModal(true)}>+ Log Activity</button>
       </div>
+
+      {/* Log Activity Modal */}
+      {showModal && (
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content shadow">
+              <div className="modal-header bg-dark text-white">
+                <h5 className="modal-title">Log New Exercise</h5>
+                <button type="button" className="btn-close btn-close-white" onClick={() => setShowModal(false)}></button>
+              </div>
+              <div className="modal-body">
+                <form>
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Activity Type</label>
+                    <select className="form-select">
+                      <option>Running</option>
+                      <option>Cycling</option>
+                      <option>Swimming</option>
+                      <option>Yoga</option>
+                      <option>Strength Training</option>
+                    </select>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label fw-bold">Duration (min)</label>
+                      <input type="number" className="form-control" />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label fw-bold">Calories</label>
+                      <input type="number" className="form-control" />
+                    </div>
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Performed At</label>
+                    <input type="datetime-local" className="form-control" />
+                  </div>
+                </form>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-outline-secondary" onClick={() => setShowModal(false)}>Cancel</button>
+                <button type="button" className="btn btn-primary" onClick={() => setShowModal(false)}>Confirm Log</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {activities.length === 0 ? (
         <div className="alert alert-warning">No activities available</div>
       ) : (
-        <div className="table-responsive shadow-sm rounded">
+        <div className="table-responsive shadow-sm rounded border">
           <table className="table table-hover mb-0">
             <thead className="table-dark">
               <tr>
