@@ -8,18 +8,18 @@ function Activities({ apiBaseUrl }) {
   useEffect(() => {
     const fetchActivities = async () => {
       const url = `${apiBaseUrl}/activities/`;
-      console.log('Fetching activities from:', url);
+      console.log('📡 Fetching activities from:', url);
       try {
         const response = await fetch(url);
         const data = await response.json();
-        console.log('Activities data received:', data);
+        console.log('✅ Activities data received:', data);
 
         // Handle both paginated and plain array responses
         const activitiesList = data.results || data;
         setActivities(Array.isArray(activitiesList) ? activitiesList : []);
         setError(null);
       } catch (err) {
-        console.error('Error fetching activities:', err);
+        console.error('❌ Error fetching activities:', err);
         setError(err.message);
         setActivities([]);
       } finally {
@@ -30,34 +30,63 @@ function Activities({ apiBaseUrl }) {
     fetchActivities();
   }, [apiBaseUrl]);
 
-  if (loading) return <div className="alert alert-info">Loading activities...</div>;
-  if (error) return <div className="alert alert-danger">Error: {error}</div>;
+  if (loading) {
+    return (
+      <div className="alert alert-info d-flex align-items-center" role="alert">
+        <div className="spinner-border spinner-border-sm me-2" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        Loading activities...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error:</strong> {error}
+      </div>
+    );
+  }
 
   return (
     <div>
-      <h2>Activities</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>🏃 Activities</h2>
+        <button className="btn btn-primary btn-sm">+ Log Activity</button>
+      </div>
+
       {activities.length === 0 ? (
         <div className="alert alert-warning">No activities available</div>
       ) : (
-        <div className="table-responsive">
-          <table className="table table-striped">
-            <thead>
+        <div className="table-responsive shadow-sm rounded">
+          <table className="table table-hover mb-0">
+            <thead className="table-dark">
               <tr>
-                <th>Type</th>
-                <th>User</th>
-                <th>Duration (min)</th>
-                <th>Calories</th>
-                <th>Date</th>
+                <th scope="col">User</th>
+                <th scope="col">Activity Type</th>
+                <th scope="col">Duration (min)</th>
+                <th scope="col">Calories Burned</th>
+                <th scope="col">Date & Time</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
               {activities.map((activity) => (
                 <tr key={activity.id}>
-                  <td>{activity.activity_type}</td>
-                  <td>{activity.user || 'N/A'}</td>
+                  <td>
+                    <strong>{activity.user || '—'}</strong>
+                  </td>
+                  <td>
+                    <span className="badge bg-success">{activity.activity_type}</span>
+                  </td>
                   <td>{activity.duration_minutes}</td>
-                  <td>{activity.calories_burned || 'N/A'}</td>
-                  <td>{new Date(activity.performed_at).toLocaleDateString()}</td>
+                  <td>{activity.calories_burned || '—'}</td>
+                  <td>{new Date(activity.performed_at).toLocaleString()}</td>
+                  <td>
+                    <button className="btn btn-sm btn-outline-primary me-2">Edit</button>
+                    <button className="btn btn-sm btn-outline-danger">Delete</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
