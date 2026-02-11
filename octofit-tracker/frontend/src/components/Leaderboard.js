@@ -33,11 +33,10 @@ function Leaderboard() {
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
-      const codespaceName = process.env.REACT_APP_CODESPACE_NAME;
-      const baseUrl = codespaceName
-        ? `https://${codespaceName}-8000.app.github.dev/api`
-        : 'http://localhost:8000/api';
-      const url = `${baseUrl}/leaderboard/`;
+      const REACT_APP_CODESPACE_NAME = process.env.REACT_APP_CODESPACE_NAME;
+      const url = REACT_APP_CODESPACE_NAME
+        ? `https://${REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`
+        : 'http://localhost:8000/api/leaderboard/';
 
       console.log('📡 Fetching leaderboard from:', url);
       try {
