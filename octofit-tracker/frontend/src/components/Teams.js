@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function Teams({ apiBaseUrl }) {
+function Teams() {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -8,10 +8,18 @@ function Teams({ apiBaseUrl }) {
 
   useEffect(() => {
     const fetchTeams = async () => {
-      const url = `${apiBaseUrl}/teams/`;
+      const codespaceName = process.env.REACT_APP_CODESPACE_NAME;
+      const baseUrl = codespaceName
+        ? `https://${codespaceName}-8000.app.github.dev/api`
+        : 'http://localhost:8000/api';
+      const url = `${baseUrl}/teams/`;
+
       console.log('📡 Fetching teams from:', url);
       try {
         const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         console.log('✅ Teams data received:', data);
 
@@ -29,7 +37,7 @@ function Teams({ apiBaseUrl }) {
     };
 
     fetchTeams();
-  }, [apiBaseUrl]);
+  }, []);
 
   const handleCloseModal = () => {
     setShowModal(false);

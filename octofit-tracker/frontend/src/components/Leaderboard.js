@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function Leaderboard({ apiBaseUrl }) {
+function Leaderboard() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,10 +33,18 @@ function Leaderboard({ apiBaseUrl }) {
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
-      const url = `${apiBaseUrl}/leaderboard/`;
+      const codespaceName = process.env.REACT_APP_CODESPACE_NAME;
+      const baseUrl = codespaceName
+        ? `https://${codespaceName}-8000.app.github.dev/api`
+        : 'http://localhost:8000/api';
+      const url = `${baseUrl}/leaderboard/`;
+
       console.log('📡 Fetching leaderboard from:', url);
       try {
         const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         console.log('✅ Leaderboard data received:', data);
 
@@ -54,7 +62,7 @@ function Leaderboard({ apiBaseUrl }) {
     };
 
     fetchLeaderboard();
-  }, [apiBaseUrl]);
+  }, []);
 
   if (loading) {
     return (

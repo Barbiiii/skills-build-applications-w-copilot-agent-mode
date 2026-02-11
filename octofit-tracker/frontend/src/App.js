@@ -8,18 +8,7 @@ import Users from './components/Users';
 import Workouts from './components/Workouts';
 import './App.css';
 
-const getApiBaseUrl = () => {
-  const codespaceName = process.env.REACT_APP_CODESPACE_NAME;
-  if (codespaceName) {
-    return `https://${codespaceName}-8000.app.github.dev/api`;
-  }
-  return 'http://localhost:8000/api';
-};
-
 function App() {
-  const apiBaseUrl = getApiBaseUrl();
-  console.log('🚀 App initialized with API Base URL:', apiBaseUrl);
-
   return (
     <Router>
       <div className="App">
@@ -75,12 +64,12 @@ function App() {
         {/* Main Content */}
         <main className="container-lg py-4">
           <Routes>
-            <Route path="/" element={<Home apiBaseUrl={apiBaseUrl} />} />
-            <Route path="/teams" element={<Teams apiBaseUrl={apiBaseUrl} />} />
-            <Route path="/users" element={<Users apiBaseUrl={apiBaseUrl} />} />
-            <Route path="/activities" element={<Activities apiBaseUrl={apiBaseUrl} />} />
-            <Route path="/workouts" element={<Workouts apiBaseUrl={apiBaseUrl} />} />
-            <Route path="/leaderboard" element={<Leaderboard apiBaseUrl={apiBaseUrl} />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/teams" element={<Teams />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/activities" element={<Activities />} />
+            <Route path="/workouts" element={<Workouts />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
           </Routes>
         </main>
 
@@ -97,7 +86,12 @@ function App() {
   );
 }
 
-function Home({ apiBaseUrl }) {
+function Home() {
+  const codespaceName = process.env.REACT_APP_CODESPACE_NAME;
+  const apiBaseUrl = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api`
+    : 'http://localhost:8000/api';
+
   return (
     <div className="row">
       <div className="col-lg-10 mx-auto">
@@ -177,5 +171,4 @@ function Home({ apiBaseUrl }) {
 }
 
 export default App;
-
 

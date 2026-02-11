@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function Activities({ apiBaseUrl }) {
+function Activities() {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -8,10 +8,18 @@ function Activities({ apiBaseUrl }) {
 
   useEffect(() => {
     const fetchActivities = async () => {
-      const url = `${apiBaseUrl}/activities/`;
+      const codespaceName = process.env.REACT_APP_CODESPACE_NAME;
+      const baseUrl = codespaceName
+        ? `https://${codespaceName}-8000.app.github.dev/api`
+        : 'http://localhost:8000/api';
+      const url = `${baseUrl}/activities/`;
+
       console.log('📡 Fetching activities from:', url);
       try {
         const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         console.log('✅ Activities data received:', data);
 
@@ -29,7 +37,7 @@ function Activities({ apiBaseUrl }) {
     };
 
     fetchActivities();
-  }, [apiBaseUrl]);
+  }, []);
 
   if (loading) {
     return (
@@ -145,4 +153,3 @@ function Activities({ apiBaseUrl }) {
 }
 
 export default Activities;
-

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function Users({ apiBaseUrl }) {
+function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -8,10 +8,18 @@ function Users({ apiBaseUrl }) {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const url = `${apiBaseUrl}/users/`;
+      const codespaceName = process.env.REACT_APP_CODESPACE_NAME;
+      const baseUrl = codespaceName
+        ? `https://${codespaceName}-8000.app.github.dev/api`
+        : 'http://localhost:8000/api';
+      const url = `${baseUrl}/users/`;
+
       console.log('📡 Fetching users from:', url);
       try {
         const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         console.log('✅ Users data received:', data);
 
@@ -29,7 +37,7 @@ function Users({ apiBaseUrl }) {
     };
 
     fetchUsers();
-  }, [apiBaseUrl]);
+  }, []);
 
   if (loading) {
     return (
